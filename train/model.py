@@ -31,8 +31,12 @@ class LSTMClassifier(nn.Module):
         """
         Perform a forward pass of our model on some input.
         """
-        #print('input: {}'.format(x.shape))
-        x = x.t() #TF: because batch_first=False
+        x = x.long()
+        try:
+            x = x.t() #TF: because batch_first=False
+        except:
+            print("Couldn't transpose the input with shape {}".format(str(x.shape)))
+            x = x.view(1,-1)
         #print('transposed: {}'.format(x.shape))
         lengths = x[0,:]
         reviews = x[1:,:]
@@ -49,7 +53,7 @@ class LSTMClassifier(nn.Module):
         temp_out = lstm_out.view(fixed_length, batch_size, 2, self.hidden_dim) #reshape to separate the two directions
         #print('lstm out after separation: {}'.format(temp_out.shape))
         #TF: concatenate the last significative output of the right lstm (lenghts-1) with the last output of the left lstm (0)
-        out = torch.cat((temp_out[-1, :, 0, :], temp_out[0, :, 1, :]), 1).squeeze()        
+        out = torch.cat((temp_out[-1, :, 0, :], temp_out[0, :, 1, :]), 1).squeeze().view(batch_size,-1)        
         #print('resulting output after lstm: {}'.format(out.shape))
         out = self.norm1(out)
         #print('after batchnorm1: {}'.format(out.shape))

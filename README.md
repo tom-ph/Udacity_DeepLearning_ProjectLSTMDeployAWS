@@ -1,5 +1,5 @@
-# SageMaker Deployment Project
+# My implementation of the Udacity project for deploying of a LSTM classifier in AWS
 
-The notebook and Python files provided here, once completed, result in a simple web app which interacts with a deployed recurrent neural network performing sentiment analysis on movie reviews. This project assumes some familiarity with SageMaker, the mini-project, Sentiment Analysis using XGBoost, should provide enough background.
+You need a SageMaker instance to run this project. It is also highly reccomanded to run the training on an instance with GPU.
 
-Please see the [README](https://github.com/udacity/sagemaker-deployment/tree/master/README.md) in the root directory for instructions on setting up a SageMaker notebook and downloading the project files (as well as the other notebooks).
+The html file on the website folder is a sample of the Web App, but won't work because the endpoint was turned off.

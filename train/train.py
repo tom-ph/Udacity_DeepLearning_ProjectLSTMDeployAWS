@@ -109,7 +109,7 @@ def train(model, train_loader, valid_loader, epochs, early_stopping_rounds, opti
             loss.backward()
             optimizer.step()           
             total_loss += loss.data.item()            
-        sys.stdout.write("Epoch: {}, Training_Loss: {}\n".format(epoch, total_loss / len(train_loader)))
+        print("Epoch: {}, Training_Loss: {}\n".format(epoch, total_loss / len(train_loader)))
         
         model.eval()
         total_loss = 0
@@ -144,8 +144,8 @@ def train(model, train_loader, valid_loader, epochs, early_stopping_rounds, opti
             best_valid_loss=valid_loss
             checkpoint_valid_acc=valid_acc
             model_checkpoint=model
-    sys.stdout.write("Final_Validation_Loss: {}\n".format(best_valid_loss))
-    sys.stdout.write("Final_Validation_Accuracy: {}\n".format(checkpoint_valid_acc))
+    print("Final_Validation_Loss: {}\n".format(best_valid_loss))
+    print("Final_Validation_Accuracy: {}\n".format(checkpoint_valid_acc))
     model=model_checkpoint
 
 

@@ -55,7 +55,13 @@ def input_fn(serialized_input_data, content_type):
 
 def output_fn(prediction_output, accept):
     print('Serializing the generated output.')
-    return str(prediction_output)
+    enc = str(prediction_output)
+    try:
+        dec = enc.decode()
+    except (UnicodeDecodeError, AttributeError):
+        print("Couldn't decode {}. Returning the value itself.".format(enc)) 
+        dec = float(enc)
+    return dec
 
 def predict_fn(input_data, model):
     print('Inferring sentiment of input data.')
@@ -70,8 +76,9 @@ def predict_fn(input_data, model):
     #         data_X   - A sequence of length 500 which represents the converted review
     #         data_len - The length of the review
 
-    data_X = None
-    data_len = None
+    data_X = review_to_words(input_data)
+    converted, leng = convert_and_pad(model.word_dict, data_X)
+    data_X, data_len = np.array(converted).reshape(1,-1), np.array(leng).reshape(1,1)
 
     # Using data_X and data_len we construct an appropriate input tensor. Remember
     # that our model expects input data of the form 'len, review[500]'.
@@ -87,6 +94,6 @@ def predict_fn(input_data, model):
     # TODO: Compute the result of applying the model to the input data. The variable `result` should
     #       be a numpy array which contains a single integer which is either 1 or 0
 
-    result = None
-
+    out = model(data)                      
+    result = out.squeeze().cpu().detach().numpy()
     return result
